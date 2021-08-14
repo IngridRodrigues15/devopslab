@@ -1,31 +1,16 @@
-# Linguagem Utilizada para Desenvolver a Aplicação
 language: python
-
-# Versão que a aplicação suporta.
 python:
-  - "3.7.9"
-
-# Instalação de Módulos que são necessários para a Aplicação.
+- 3.7.9
 install:
-  - pip install flask
-
-# Defini o script de Teste que deve rodar toda vez que o código for alterado.
+- pip install flask
 script:
-  - python -m unittest -v test
-
-# Definir o Deploy no Heroku
-# deploy:
-#   provider: heroku
-#   api_key: $HEROKU_API_KEY
-#   edge: true 
-#   app: devops-lab-ingrid
-#   on:
-#     branch: stage
-
+- python -m unittest -v test
 deploy:
   provider: gae
-  keyfile: ../lab-devops-cloud-e2c2da9aee66.json
+  keyfile: "../lab-devops-cloud-e2c2da9aee66.json"
   project: labdevopscloud-ingrid
   on:
     branch: main
- 
+before_install:
+- openssl aes-256-cbc -K $encrypted_28260de50144_key -iv $encrypted_28260de50144_iv
+  -in gcpkey.json.enc -out ../gcpkey.json -d
