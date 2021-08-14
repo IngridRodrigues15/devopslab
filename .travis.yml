@@ -22,37 +22,37 @@ jobs:
   include:
     - stage: Build
 
-      name: "Testes Unitarios"
-      # Instalação de Módulos que são necessários para a Aplicação.
-      install:
-        - pip install flask flask-wtf coverage
-      script:  # Defini o script de Teste que deve rodar toda vez que o código for alterado.
-        - coverage run test.py || travis_terminate 1;
-        - coverage report app.py || travis_terminate 1;
-        - coverage xml app.py || travis_terminate 1;
+#       name: "Testes Unitarios"
+#       # Instalação de Módulos que são necessários para a Aplicação.
+#       install:
+#         - pip install flask flask-wtf coverage
+#       script:  # Defini o script de Teste que deve rodar toda vez que o código for alterado.
+#         - coverage run test.py || travis_terminate 1;
+#         - coverage report app.py || travis_terminate 1;
+#         - coverage xml app.py || travis_terminate 1;
 
-    - stage: STG Deploy
-      script: skip
-      # Definir o Deploy no Heroku
-      deploy:
-        provider: heroku
-        strategy: api
-        api_key: $HEROKU_API_KEY
-        edge: true
-        app: devops-lab-ingrid
-        on:
-          branch: main
+#     - stage: STG Deploy
+#       script: skip
+#       # Definir o Deploy no Heroku
+#       deploy:
+#         provider: heroku
+#         strategy: api
+#         api_key: $HEROKU_API_KEY
+#         edge: true
+#         app: devops-lab-ingrid
+#         on:
+#           branch: main
 
-    - stage: STG TEST
-      script:
-        - curl https://devops-lab-ingrid.herokuapp.com/ | grep Hello || travis_terminate 1;
+#     - stage: STG TEST
+#       script:
+#         - curl https://devops-lab-ingrid.herokuapp.com/ | grep Hello || travis_terminate 1;
 
     - stage: PROD Deploy
       script: skip
       # Definir o Deploy no Google Cloud
       deploy:
         provider: gae
-        keyfile: ../gcpkey.json
+        keyfile: ../labdevopscloud-ingrid-24f256698030.json
         project: labdevopscloud-ingrid
         on:
           branch: main
