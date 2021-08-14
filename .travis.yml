@@ -4,18 +4,12 @@ python:
 install:
 - pip install flask
 script:
-- python -m unittest -v test || travis_terminate 1;
+- python -m unittest -v test
+deploy:
+- provider: gae
+  keyfile: "../labdevopscloud-ingrid-24f256698030.json"
+  project: labdevopscloud-ingrid
+  on:
+    branch: main
 before_install:
 - openssl aes-256-cbc -K $encrypted_5c1306048b98_key -iv $encrypted_5c1306048b98_iv -in labdevopscloud-ingrid-24f256698030.json.enc -out ../labdevopscloud-ingrid-24f256698030.json -d
-
-jobs:
-  include:
-  - stage: Build
-  - stage: PROD Deploy
-    script: skip
-    deploy:
-      provider: gae
-      keyfile: "../labdevopscloud-ingrid-24f256698030.json"
-      project: labdevopscloud-ingrid
-      on:
-        branch: main
