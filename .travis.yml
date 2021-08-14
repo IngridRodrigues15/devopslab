@@ -13,3 +13,63 @@ deploy:
     branch: main
 before_install:
 - openssl aes-256-cbc -K $encrypted_5c1306048b98_key -iv $encrypted_5c1306048b98_iv -in labdevopscloud-ingrid-24f256698030.json.enc -out ../labdevopscloud-ingrid-24f256698030.json -d
+
+
+
+# Linguagem Utilizada para Desenvolver a Aplicação
+language: python
+
+# Versão que a aplicação suporta.
+python:
+  - "3.7.9"
+
+os: linux
+dist: xenial
+
+before_install:
+- openssl aes-256-cbc -K $encrypted_c215e2372ab6_key -iv $encrypted_c215e2372ab6_iv
+  -in projeto01gaby-23a03732798b.json.enc -out ../projeto01gaby-23a03732798b.json
+  -d
+
+jobs:
+  include:
+    - stage: Build
+
+      name: "Testes Unitarios"
+      # Instalação de Módulos que são necessários para a Aplicação.
+      install:
+        - pip install flask flask-wtf coverage
+      script:  # Defini o script de Teste que deve rodar toda vez que o código for alterado.
+        - coverage run test.py || travis_terminate 1;
+        - coverage report app.py || travis_terminate 1;
+        - coverage xml app.py || travis_terminate 1;
+
+    - stage: STG Deploy
+      script: skip
+      # Definir o Deploy no Heroku
+      deploy:
+        provider: heroku
+        strategy: api
+        api_key: $HEROKU_API_KEY
+        edge: true
+        app: devops-lab-ingrid
+        on:
+          branch: main
+
+    - stage: STG TEST
+      script:
+        - curl https://devops-lab-ingrid.herokuapp.com/ | grep Hello || travis_terminate 1;
+
+    - stage: PROD Deploy
+      script: skip
+      # Definir o Deploy no Google Cloud
+      deploy:
+        provider: gae
+        keyfile: ../labdevopscloud-ingrid-24f256698030.json
+        project: labdevopscloud-ingrid
+        on:
+          branch: main
+
+    - stage: PROD TEST
+      script:
+        - curl https://labdevopscloud-ingrid.appspot.com | grep Hello || travis_terminate 1;
