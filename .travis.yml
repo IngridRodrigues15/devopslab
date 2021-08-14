@@ -1,58 +1,23 @@
-# Linguagem Utilizada para Desenvolver a Aplicação
 language: python
-
-# Versão que a aplicação suporta.
 python:
-  - "3.7.9"
-
-# Instalação de Módulos que são necessários para a Aplicação.
+- 3.7.9
 install:
-  - pip install flask
-
-# Defini o script de Teste que deve rodar toda vez que o código for alterado.
+- pip install flask
 script:
-  - python -m unittest -v test || travis_terminate 1;
-
+- python -m unittest -v test || travis_terminate 1;
 before_install:
-  - openssl aes-256-cbc -K $encrypted_28260de50144_key -iv $encrypted_28260de50144_iv
-    -in gcpkey.json.enc -out ../gcpkey.json
-    -d
+- openssl aes-256-cbc -K $encrypted_5c1306048b98_key -iv $encrypted_5c1306048b98_iv
+  -in labdevopscloud-ingrid-24f256698030.json.enc -out ../labdevopscloud-ingrid-24f256698030.json
+  -d
 
 jobs:
   include:
-    - stage: Build
-
-#       name: "Testes Unitarios"
-#       # Instalação de Módulos que são necessários para a Aplicação.
-#       install:
-#         - pip install flask flask-wtf coverage
-#       script:  # Defini o script de Teste que deve rodar toda vez que o código for alterado.
-#         - coverage run test.py || travis_terminate 1;
-#         - coverage report app.py || travis_terminate 1;
-#         - coverage xml app.py || travis_terminate 1;
-
-#     - stage: STG Deploy
-#       script: skip
-#       # Definir o Deploy no Heroku
-#       deploy:
-#         provider: heroku
-#         strategy: api
-#         api_key: $HEROKU_API_KEY
-#         edge: true
-#         app: devops-lab-ingrid
-#         on:
-#           branch: main
-
-#     - stage: STG TEST
-#       script:
-#         - curl https://devops-lab-ingrid.herokuapp.com/ | grep Hello || travis_terminate 1;
-
-    - stage: PROD Deploy
-      script: skip
-      # Definir o Deploy no Google Cloud
-      deploy:
-        provider: gae
-        keyfile: ../labdevopscloud-ingrid-24f256698030.json
-        project: labdevopscloud-ingrid
-        on:
-          branch: main
+  - stage: Build
+  - stage: PROD Deploy
+    script: skip
+    deploy:
+      provider: gae
+      keyfile: "../labdevopscloud-ingrid-24f256698030.json"
+      project: labdevopscloud-ingrid
+      on:
+        branch: main
